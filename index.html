@@ -80,3 +80,501 @@ footer {
     </main>
 </body>
 </html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Products</title>
+    <link rel="stylesheet" href="style.css">
+    <script>
+        // Simple cart management
+        let cart = [];
+        let loggedInUser = null;
+        let transactions = {}; // Object to store user transactions
+
+        function register() {
+            const username = prompt("Enter a username to register:");
+            if (username) {
+                alert(`User ${username} registered successfully! Please log in to continue.`);
+            }
+        }
+
+        function login() {
+            const username = prompt("Enter your username to log in:");
+            if (username) {
+                loggedInUser = username;
+                // Initialize transaction history for the user if not already done
+                if (!transactions[username]) {
+                    transactions[username] = [];
+                }
+                alert(`Welcome back, ${loggedInUser}! You can now add items to your cart.`);
+            }
+        }
+
+        function addToCart(productName, price) {
+            if (!loggedInUser) {
+                alert("You need to register or log in before adding items to the cart.");
+                return;
+            }
+            cart.push({ name: productName, price: price });
+            alert(`${productName} has been added to your cart!`);
+            displayTotal();
+            console.log(cart); // For debugging
+        }
+
+        function displayTotal() {
+            const total = cart.reduce((sum, item) => sum + item.price, 0);
+            alert(`Total amount in your cart: Ksh.${total}`);
+        }
+
+        function viewCart() {
+            if (cart.length === 0) {
+                alert("Your cart is empty!");
+                return;
+            }
+
+            let cartItems = "Items in your cart:\n";
+            cart.forEach(item => {
+                cartItems += `${item.name} - Ksh.${item.price}\n`;
+            });
+            const total = cart.reduce((sum, item) => sum + item.price, 0);
+            cartItems += `\nTotal: Ksh.${total}`;
+            alert(cartItems);
+            askForPhoneNumber(total); // Pass total to the phone number function
+        }
+
+        function askForPhoneNumber(total) {
+            const phoneNumber = prompt("Please enter your phone number for payment:");
+            if (phoneNumber) {
+                alert(`Phone number ${phoneNumber} received! Proceeding to payment...`);
+                processPayment(total); // Proceed to payment processing
+            } else {
+                alert("Phone number is required to proceed with payment.");
+            }
+        }
+
+        function processPayment(total) {
+            while (true) {
+                const payment = parseFloat(prompt(`Enter your payment amount (Total: Ksh.${total}):`));
+                
+                if (isNaN(payment)) {
+                    alert("Invalid input. Please enter a numeric value.");
+                    continue; // Ask again
+                }
+                
+                if (payment < total) {
+                    alert("Payment failed: Insufficient amount. Please try again.");
+                } else {
+                    alert("Payment successful! Thank you for your purchase.");
+                    recordTransaction(total); // Record the transaction
+                    cart = []; // Clear the cart after successful payment
+                    break; // Exit the loop on success
+                }
+            }
+        }
+
+        function recordTransaction(amount) {
+            const transaction = {
+                amount: amount,
+                date: new Date().toLocaleString(),
+                status: "Completed"
+            };
+            transactions[loggedInUser].push(transaction); // Store transaction in user's history
+            alert(`Your account has been updated. Transaction of Ksh.${amount} has been recorded.`);
+            console.log(transactions); // For debugging
+        }
+
+        function promptLoginOrRegister() {
+            let action = prompt("Do you want to register or log in? (type 'register' or 'login')");
+            if (action === 'register') {
+                register();
+            } else if (action === 'login') {
+                login();
+            } else {
+                alert("Invalid option. Please try again.");
+            }
+        }
+    </script>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <img src="C:\Users\pc\OneDrive\Desktop\dan project\Kits2.jpg" alt="logo">
+            </div>
+            <nav class="navbar">
+                <ul>
+                    <li><a href="C:\Users\pc\OneDrive\Desktop\dan project\home.html">home</a></li>
+                    <li><a href="C:\Users\pc\OneDrive\Desktop\dan project\products.html">Products</a></li>
+                    <li><a href="C:\Users\pc\OneDrive\Desktop\dan project\About.html">About Us</a></li>
+                    <li><a href="C:\Users\pc\OneDrive\Desktop\dan project\contact.html">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <div class="products-container">
+            <h1>Our Products</h1>
+            <div class="product-grid">
+                <!-- Product 1 -->
+                <div class="product-item">
+                    <img src="C:\Users\pc\OneDrive\Desktop\dan project\images.jpg" alt="images">
+                    <h2>images</h2>
+                    <p class="price">Ksh.2800</p>
+                    <p class="description">New model in the market, all sizes and all colors.</p>
+                    <button onclick="addToCart('images', 2800)">Add to Cart</button>
+                </div>
+                <div class="product-item">
+                    <img src="C:\Users\pc\OneDrive\Desktop\dan project\afc-wimbledon-vintage-tops.jpg">
+                    <h2>afc-wimbledon-vintage-tops</h2>
+                    <p class="price">Ksh.1580</p>
+                    <p class="description">Old model in the market, all sizes and all colors.</p>
+                    <button onclick="addToCart('afc-wimbledon-vintage-tops', 1580)">Add to Cart</button>
+                </div>
+
+                <!-- Product 2 -->
+                <div class="product-item">
+                    <img src="C:\Users\pc\OneDrive\Desktop\dan project\golden boots.webp" alt="golden boots">
+                    <h2>X new model</h2>
+                    <p class="price">Ksh.3500</p>
+                    <p class="description">So durable with strong stands... all sizes and different colors.</p>
+                    <button onclick="addToCart('X new model', 3500)">Add to Cart</button>
+                </div>
+                <!-- Product 3 -->
+                <div class="product-item">
+                    <img src="C:\Users\pc\OneDrive\Desktop\dan project\soccer ball.webp" alt="soccer ball">
+                    <h2>soccer ball</h2>
+                    <p class="price">Ksh.2300</p>
+                    <p class="description">Hard, leather, with tube.</p>
+                    <button onclick="addToCart('soccer ball', 2300)">Add to Cart</button>
+                </div>
+                <div class="product-item">
+                    <img src="C:\Users\pc\OneDrive\Desktop\dan project\classic-shirts.jpg" alt="classic-shirts">
+                    <h2>classic-shirts</h2>
+                    <p class="price">Ksh.1580</p>
+                    <p class="description">soft, cotton material, so durable.</p>
+                    <button onclick="addToCart('classic-shirts', 1580)">Add to Cart</button>
+                </div>
+                <!-- Additional products -->
+                <div class="product-item">
+                    <img src="C:\Users\pc\OneDrive\Desktop\dan project\phantom gnex.jpeg" alt="phantom">
+                    <h2>Phantom pro</h2>
+                    <p class="price">Ksh.3200</p>
+                    <p class="description">Hard, leather material, so durable.</p>
+                    <button onclick="addToCart('Phantom pro', 3200)">Add to Cart</button>
+                </div>
+                <div class="product-item">
+                    <img src="C:\Users\pc\OneDrive\Desktop\dan project\arsenal-kits.jpg" alt="phantom">
+                    <h2>arsenal-kits</h2>
+                    <p class="price">Ksh.1180</p>
+                    <p class="description">soft, cotton material, so durable.</p>
+                    <button onclick="addToCart('arsenal-kits', 1180)">Add to Cart</button>
+                </div>
+                <div class="product-item">
+                    <img src="C:\Users\pc\OneDrive\Desktop\dan project\New Chelsea jersey.avif" alt="phantom">
+                    <h2>New Chelsea jersey</h2>
+                    <p class="price">Ksh.1180</p>
+                    <p class="description">soft, cotton material, so durable.</p>
+                    <button onclick="addToCart('New Chelsea jersey', 1180)">Add to Cart</button>
+                </div>
+                <div class="product-item">
+                    <img src="C:\Users\pc\OneDrive\Desktop\dan project\New Chelsea Shorts.avif" alt="phantom">
+                    <h2>New Chelsea Shorts.avif</h2>
+                    <p class="price">Ksh.720</p>
+                    <p class="description">soft, cotton material, so durable.</p>
+                    <button onclick="addToCart('New Chelsea Shorts.avif', 720)">Add to Cart</button>
+                </div>
+                <div class="product-item">
+                    <img src="C:\Users\pc\OneDrive\Desktop\dan project\1-classic-football-shirts-event.jpg" alt="1-classic-football-shirts">
+                    <h2>1-classic-football-shirts1</h2>
+                    <p class="price">Ksh.1300</p>
+                    <p class="description">soft, cotton material, so durable.</p>
+                    <button onclick="addToCart('1-classic-football-shirts', 1300)">Add to Cart</button>
+                </div>
+                <div class="product-item">
+                    <img src="C:\Users\pc\OneDrive\Desktop\dan project\Numbered Jerseys.jpg" alt="1-classic-football-shirts">
+                    <h2>Numbered Jerseys</h2>
+                    <p class="price">Ksh.1280</p>
+                    <p class="description">soft, cotton material, so durable.</p>
+                    <button onclick="addToCart('Numbered Jerseys', 1280)">Add to Cart</button>
+                </div>
+                <div class="product-item">
+                    <img src="C:\Users\pc\OneDrive\Desktop\dan project\soccer boots.jpeg" alt="soccer boots">
+                    <h2>soccer boots</h2>
+                    <p class="price">Ksh.3500</p>
+                    <p class="description">Light weight, soft surface, cotton made.</p>
+                    <button onclick="addToCart('soccer boots', 3500)">Add to Cart</button>
+                </div>
+                <div class="product-item">
+                    <img src="C:\Users\pc\OneDrive\Desktop\dan project\2-classic-football-shirts-event.jpg" alt="bib">
+                    <h2>2-classic-football-shirts</h2>
+                    <p class="price">Ksh.1580</p>
+                    <p class="description">up for grab.</p>
+                    <button onclick="addToCart('2-classic-football-shirts', 1580)">Add to Cart</button>
+                </div>
+                <div class="product-item">
+                    <img src="C:\Users\pc\OneDrive\Desktop\dan project\chelsea-kits.jpg" alt="bib">
+                    <h2>chelsea-kits</h2>
+                    <p class="price">Ksh.1400</p>
+                    <p class="description">All colors available.</p>
+                    <button onclick="addToCart('chelsea-kits', 1400)">Add to Cart</button>
+                </div>
+                class="product-item">
+                    <img src="C:\Users\pc\OneDrive\Desktop\dan project\bib.jpeg" alt="bib">
+                    <h2>Training bibs</h2>
+                    <p class="price">Ksh.150</p>
+                    <p class="description">All colors available, flexible.</p>
+                    <button onclick="addToCart('Training bibs', 150)">Add to Cart</button>
+                </div>
+                class="product-item">
+                <img src="C:\Users\pc\OneDrive\Desktop\dan project\Man City.webp" alt="bib">
+                <h2>Man City</h2>
+                <p class="price">Ksh.1400</p>
+                <p class="description">All colors available, flexible.</p>
+                <button onclick="addToCart('Man City', 1400)">Add to Cart</button>
+            </div>
+                <div class="product-item">
+                    <img src="C:\Users\pc\OneDrive\Desktop\dan project\cones6.jpeg" alt="cones6">
+                    <h2>Training cones</h2>
+                    <p class="price">Ksh.850</p>
+                    <p class="description">Strong and all colors and types available.</p>
+                    <button onclick="addToCart('Training cones', 850)">Add to Cart</button>
+                </div>
+                <div class="product-item">
+                    <img src="C:\Users\pc\OneDrive\Desktop\dan project\trainer.jpeg" alt="trainer">
+                    <h2>Trainers</h2>
+                    <p class="price">Ksh.1800</p>
+                    <p class="description">All colors available, flexible.</p>
+                    <button onclick="addToCart('Trainers', 1800)">Add to Cart</button>
+                </div>
+            </div>
+            <button onclick="viewCart()">View Cart</button>
+            <button onclick="promptLoginOrRegister()">Register/Login</button>
+        </div>
+    </main>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopify</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            /* Background image */
+            background-image: url('C:\Users\pc\OneDrive\Desktop\dan project\trainer.jpeg'); /* Change this to your image path */
+            background-size: cover; /* Make the background cover the whole screen */
+            background-position: center; /* Center the background image */
+            color: rgb(0, 1, 3); /* Change text color for visibility */
+        }
+        header {
+            background: rgba(0, 0, 0, 0.5); /* Semi-transparent background for header */
+            padding: 20px;
+        }
+        nav ul {
+            list-style-type: none; /* Remove default list styling */
+        }
+        nav ul li {
+            display: inline; /* Display list items inline */
+            margin-right: 20px; /* Space between menu items */
+        }
+        nav ul li a {
+            color: rgb(240, 114, 11); /* Link color */
+            text-decoration: none; /* Remove underline */
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <!-- Logo on the left -->
+            <div class="logo">
+                <img src="C:\Users\pc\OneDrive\Desktop\dan project\@KitsCorner.jpg" alt="@KitsCorner">
+            </div>
+
+            <!-- Navigation or other content -->
+            <nav class="navbar">
+                <ul>
+                    <li><a href="C:\Users\pc\OneDrive\Desktop\dan project/home.html">home</a></li>
+                    <li><a href="C:\Users\pc\OneDrive\Desktop\dan project/products.html">Products</a></li>
+                    <li><a href="C:\Users\pc\OneDrive\Desktop\dan project/About.html">about us</a></li>
+                    <li><a href="C:\Users\pc\OneDrive\Desktop\dan project/contact.html">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+</body>
+</html>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - Shopify Online Market</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #0e0101;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+        header {
+            background: #4CAF50;
+            color: rgb(8, 1, 1);
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 20px; /* Added margin below the header */
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: rgba(12, 107, 71, 0.178);
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        h1 {
+            font-size: 2.5em; /* Increased font size for main heading */
+            margin-bottom: 20px;
+        }
+        p {
+            line-height: 1.8; /* Increased line height for better readability */
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            font-size: 0.9em;
+            color: #777;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>About Us</h1>
+    </header>
+    <div class="container">
+        <p>
+            At Kits Corner, we are passionate about providing top-quality products that enhance your lifestyle and elevate your experiences. <br>Founded in 2022, our mission has always been to offer our customers an exceptional selection of sports gear, paired with outstanding customer service.<br> Kits Corner Online Market started as a dream to create a one-stop shop for sports equipment nationwide. With a commitment to quality and a keen eye for trends, we began curating a unique collection of products that cater to our customers' diverse needs. We believe in offering only the best products, and each item in our collection is carefully selected to ensure it meets our high standards of quality and durability.<br> Your satisfaction is our priority, and our dedicated team is always ready to assist you, whether you have questions about our products or need help with your order.<br> We are committed to minimizing our environmental impact and strive to work with brands that share our commitment to sustainable practices.<br> Additionally, we believe in giving back to the community, and a portion of our profits goes to charitable organizations and causes we support.<br> We offer a wide range of products, including athletic footwear, training equipment, and casual wear.<br> Whether you're looking for the latest trends or timeless classics, we have something for everyone.<br> We invite you to explore our collection and become part of the Kits Corner Online Market family.<br> Follow us on social media for the latest updates, promotions, and behind-the-scenes looks at our team and products.<br> If you have any questions or feedback, feel free to reach out at <strong><a href="mailto:KitsCorner@gmail.com"></a></strong>KitsCorner@gmail.com</a> or visit our <a href="Contact.html"><Contact page</a>.
+        </p>
+    </div>
+    <footer>
+        &copy;@2024 Kits Corner Market. All rights reserved.
+    </footer>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            background-image: url('C:\Users\pc\OneDrive\Desktop\dan project\soccer-field-with-penalty-spot-photo.jpg'); /* Use forward slashes */
+            background-size: cover;
+            background-position: center;
+            color: rgb(34, 4, 4); /* Change text color for visibility */
+        }
+        header {
+            background: rgba(0, 0, 0, 0.7); /* Increased opacity for better contrast */
+            padding: 20px;
+        }
+        nav ul {
+            list-style-type: none; /* Remove default list styling */
+            padding: 0; /* Remove padding */
+            margin: 0; /* Remove margin */
+        }
+        nav ul li {
+            display: inline; /* Display list items inline */
+            margin-right: 20px; /* Space between menu items */
+        }
+        nav ul li a {
+            color: rgb(55, 34, 133); /* Link color */
+            text-decoration: none; /* Remove underline */
+            font-size: 18px; /* Increase font size for better visibility */
+        }
+        nav ul li a:hover {
+            text-decoration: underline; /* Underline on hover */
+            color: #34c8e2; /* Change color on hover */
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <img src="C:\Users\pc\OneDrive\Desktop\dan project\@KitsCorner.jpg" alt="@KitsCorner">
+            </div>
+            <nav class="navbar">
+                <ul>
+                    <li><a href="C:\Users\pc\OneDrive\Desktop\dan project/home.html">home</a></li>
+                    <li><a href="C:\Users\pc\OneDrive\Desktop\dan project/products.html">Products</a></li>
+                    <li><a href="C:\Users\pc\OneDrive\Desktop\dan project/About.html">About Us</a></li>
+                    <li><a href="C:\Users\pc\OneDrive\Desktop\dan project/contact.html">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <h1>Contact Us</h1>
+        <form id="contact-form" onsubmit="return handleSubmit(event)">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required>
+
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+
+            <label for="phone">Phone:</label>
+            <input type="tel" id="phone" name="phone" placeholder="123-456-7890">
+
+            <label for="subject">Subject:</label>
+            <select id="subject" name="subject" required>
+                <option value="">Select a subject</option>
+                <option value="general">General Inquiry</option>
+                <option value="support">Support</option>
+                <option value="feedback">Feedback</option>
+            </select>
+
+            <label for="message">Message:</label>
+            <textarea id="message" name="message" rows="3" required></textarea>
+
+            <button type="submit">Send Message</button>
+        </form>
+    </div>
+    
+    <script>
+        function handleSubmit(event) {
+            event.preventDefault(); // Prevent the form from submitting normally
+
+            // Gather form data
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
+            const subject = document.getElementById('subject').value;
+            const message = document.getElementById('message').value;
+
+            // Basic validation (additional checks can be added here)
+            if (name && email && message) {
+                alert(`Thank you, ${name}! Your message has been sent.\n\nSubject: ${subject}\nPhone: ${phone}`);
+                // Here you would typically send the data to your server
+                // For example, using fetch or XMLHttpRequest
+            } else {
+                alert('Please fill in all required fields.');
+            }
+            return false; // Prevent the default form submission
+        }
+    </script>
+</body>
+</html>
+
+
